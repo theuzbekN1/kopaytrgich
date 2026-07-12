@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matn Ko'paytirgich</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 { text-align: center; color: #333; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        textarea, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .checkbox-item input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover { background-color: #0056b3; }
+        .copy-btn { background-color: #28a745; }
+        .copy-btn:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Matn Ko'paytirgich v2</h2>
+    
+    <label>Matnni kiriting:</label>
+    <textarea id="userText" rows="4" placeholder="Bu yerga harf yoki gap yozing..."></textarea>
+    
+    <label>Soni:</label>
+    <input type="number" id="repeatCount" value="10" min="1">
+    
+    <!-- Checkboxlar bo'limi -->
+    <div class="checkbox-group">
+        <label class="checkbox-item">
+            <input type="checkbox" id="useNewLine" checked> Yangi qatordan boshlash (Enter)
+        </label>
+        <label class="checkbox-item">
+            <input type="checkbox" id="useSpace" checked> Probel tashlash (Space)
+        </label>
+    </div>
+    
+    <button onclick="generateText()">Ko'paytirish</button>
+    
+    <label>Natija:</label>
+    <textarea id="resultText" rows="8" readonly placeholder="Natija bu yerda chiqadi..."></textarea>
+    
+    <button class="copy-btn" onclick="copyToClipboard()">Nusxa olish (Copy)</button>
+</div>
+
+<script>
+function generateText() {
+    let text = document.getElementById('userText').value;
+    let count = parseInt(document.getElementById('repeatCount').value);
+    let useNewLine = document.getElementById('useNewLine').checked;
+    let useSpace = document.getElementById('useSpace').checked;
+    
+    let result = "";
+
+    if(text === "") {
+        alert("Iltimos, oldin matn kiriting!");
+        return;
+    }
+
+    // Ajratuvchi belgi (separator) ni aniqlash
+    let separator = "";
+    if (useSpace) separator += " ";
+    if (useNewLine) separator += "\n";
+
+    // Matnni sikl (loop) yordamida ko'paytirish
+    for (let i = 0; i < count; i++) {
+        result += text;
+        // Oxirgi qatordan keyin ortiqcha joy qolib ketmasligi uchun shart
+        if (i < count - 1) {
+            result += separator;
+        }
+    }
+
+    document.getElementById('resultText').value = result;
+}
+
+function copyToClipboard() {
+    let resultText = document.getElementById('resultText');
+    if(resultText.value === "") {
+        alert("Nusxalash uchun hech narsa yo'q!");
+        return;
+    }
+    
+    resultText.select();
+    document.execCommand('copy');
+    alert("Matn nusxalandi!");
+}
+</script>
+
+</body>
+</html>
